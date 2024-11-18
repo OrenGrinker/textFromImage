@@ -1,5 +1,6 @@
 # image2text/__init__.py
 
-from .core import get_description
+from .core import TextFromImage
 
-__all__ = ["get_description"]
+__all__ = ["TextFromImage"]
+
