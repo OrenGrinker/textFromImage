@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="textfromimage",
-    version="0.3.1",  # Incremented version for new features
+    version="1.0.0",  # Incremented version for new features
     author="Oren Grinker",
     author_email="orengr4@gmail.com",
     description="Get descriptions of images from OpenAI, Azure OpenAI, and Anthropic Claude models in an easy way.",

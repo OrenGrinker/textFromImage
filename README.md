@@ -1,114 +1,121 @@
 # TextFromImage
 
-Get descriptions of images using OpenAI's GPT models, Azure OpenAI, and Anthropic Claude in an easy way.
+![Python Version](https://img.shields.io/pypi/pyversions/textfromimage)
+![PyPI Version](https://img.shields.io/pypi/v/textfromimage)
+![License](https://img.shields.io/pypi/l/textfromimage)
+![Downloads](https://img.shields.io/pypi/dm/textfromimage)
 
-## Installation
-You can install the textfromimage package via PyPI using pip:
+A powerful Python library for obtaining detailed descriptions of images using various AI models including OpenAI's GPT models, Azure OpenAI, and Anthropic Claude. Perfect for applications requiring image understanding, accessibility features, and content analysis.
+
+## 🌟 Key Features
+
+- 🤖 **Multiple AI Providers**: Support for OpenAI, Azure OpenAI, and Anthropic Claude
+- 🔄 **Flexible Integration**: Easy-to-use API with multiple initialization options
+- 🎯 **Custom Prompting**: Configurable prompts for targeted descriptions
+- 🔑 **Secure Authentication**: Multiple authentication methods including environment variables
+- 🛠️ **Model Selection**: Support for different model versions and configurations
+- 📝 **Type Hints**: Full typing support for better development experience
+
+## 📦 Installation
+
 ```bash
 pip install textfromimage
 ```
 
-## Usage
-The textfromimage package is now class-based, allowing you to initialize the TextFromImage class with your desired configurations and use its methods to obtain image descriptions.
+## 🚀 Quick Start
 
-**Using OpenAI**
-```bash
+### OpenAI Integration
+
+```python
 import textfromimage
 
-# Option 1: Initialize OpenAI client with API key
+# Initialize with API key
 textfromimage.openai.init(api_key="your-openai-api-key")
 
-# Option 2: Set your OpenAI API key as an environment variable
-# import os
-# os.environ['OPENAI_API_KEY'] = 'your-openai-api-key'
-
-# Get a description of the image using OpenAI
+# Get image description
 image_url = 'https://example.com/image.jpg'
-openai_description = textfromimage.openai.get_description(
-    image_url=image_url"
-)
-print("OpenAI Description:", openai_description)
+description = textfromimage.openai.get_description(image_url=image_url)
+print(f"Description: {description}")
 ```
 
-**Using Anthropic Claude**
-```bash
-import textfromimage
+## 💡 Advanced Usage
 
-# Option 1: Initialize Anthropic Claude client with API key
+### 🤖 Multiple Provider Support
+
+```python
+# Anthropic Claude Integration
 textfromimage.claude.init(api_key="your-anthropic-api-key")
+claude_description = textfromimage.claude.get_description(image_url=image_url)
 
-# Option 2: Set your Anthropic API key as an environment variable
-# import os
-# os.environ['ANTHROPIC_API_KEY'] = 'your-anthropic-api-key'
-
-# Get a description of the image using Anthropic Claude
-image_url = 'https://example.com/image.jpg'
-claude_description = textfromimage.claude.get_description(
-    image_url=image_url"
-)
-print("Claude Description:", claude_description)
-```
-
-**Using Azure OpenAI**
-```bash
-import textfromimage
-
-# Option 1: Initialize Azure OpenAI client with necessary parameters
+# Azure OpenAI Integration
 textfromimage.azure_openai.init(
     api_key="your-azure-openai-api-key",
     api_base="https://your-azure-endpoint.openai.azure.com/",
     deployment_name="your-deployment-name"
 )
-
-# Option 2: Set your Azure OpenAI credentials as environment variables
-# import os
-# os.environ['AZURE_OPENAI_API_KEY'] = 'your-azure-openai-api-key'
-# os.environ['AZURE_OPENAI_ENDPOINT'] = 'https://your-azure-endpoint.openai.azure.com/'
-# os.environ['AZURE_OPENAI_DEPLOYMENT'] = 'your-deployment-name'
-
-# Get a description of the image using Azure OpenAI
-image_url = 'https://example.com/image.jpg'
-azure_description = textfromimage.azure_openai.get_description(
-    image_url=image_url"
-)
-print("Azure OpenAI Description:", azure_description)
+azure_description = textfromimage.azure_openai.get_description(image_url=image_url)
 ```
 
-**Specifying a Different Model**
+### 🔧 Configuration Options
 
-You can specify a different OpenAI model if needed. By default, the model is set to "gpt-4o".
-```bash
-import textfromimage
+```python
+# Environment Variable Configuration
+import os
+os.environ['OPENAI_API_KEY'] = 'your-openai-api-key'
+os.environ['ANTHROPIC_API_KEY'] = 'your-anthropic-api-key'
+os.environ['AZURE_OPENAI_API_KEY'] = 'your-azure-openai-api-key'
+os.environ['AZURE_OPENAI_ENDPOINT'] = 'your-azure-endpoint'
+os.environ['AZURE_OPENAI_DEPLOYMENT'] = 'your-deployment-name'
 
-# Option 1: Initialize OpenAI client with API key
-textfromimage.openai.init(api_key="your-openai-api-key")
-
-# Option 2: Set your OpenAI API key as an environment variable
-# import os
-# os.environ['OPENAI_API_KEY'] = 'your-openai-api-key'
-
-# Get a description of the image using OpenAI
-image_url = 'https://example.com/image.jpg'
-openai_description = textfromimage.openai.get_description(
+# Custom Model Selection
+description = textfromimage.openai.get_description(
     image_url=image_url,
-    model='gpt-4o-mini'"
+    model='gpt-4o-mini'
 )
-print("OpenAI Description:", openai_description)
+
+# Custom Prompting
+description = textfromimage.openai.get_description(
+    image_url=image_url,
+    prompt="Describe the main elements and composition of this image"
+)
 ```
 
-## Parameters
+## 📋 Parameters
 
-- image_url (str): The URL of the image.
-- prompt (str, optional): The prompt for the description (default: "What's in this image?").
-- model (str, optional): The OpenAI model to use (default: "gpt-4o").
-- api_key (str, optional): Your OpenAI API key.
+```python
+@dataclass
+class DescriptionParams:
+    image_url: str
+    prompt: str = "What's in this image?"
+    model: str = "gpt-4o"
+    api_key: Optional[str] = None
+```
 
+## 🔍 Error Handling
 
-## Contributing
-Contributions are welcome! Please follow these steps:
+```python
+from textfromimage.exceptions import APIKeyError, InvalidImageError, ModelError
 
-1. Fork the repository.
-2. Create a new branch (git checkout -b feature/YourFeature).
-3. Commit your changes (git commit -m 'Add some feature').
-4. Push to the branch (git push origin feature/YourFeature).
-5. Open a pull request.
+try:
+    description = textfromimage.openai.get_description(image_url=image_url)
+except APIKeyError as e:
+    print(f"API key error: {e}")
+except InvalidImageError as e:
+    print(f"Image error: {e}")
+except ModelError as e:
+    print(f"Model error: {e}")
+```
+
+## 🤝 Contributing
+
+We welcome contributions! Here's how you can help:
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
+
+## 📝 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
