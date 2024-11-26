@@ -1,12 +1,13 @@
 # textfromimage/openai.py
 import os
+from typing import List, Optional
 from openai import OpenAI
-from .utils import get_image_data
+from .utils import get_image_data, process_batch_images, BatchResult
 
 _client = None
 
 
-def init(api_key=None):
+def init(api_key: Optional[str] = None) -> None:
     """
     Initialize OpenAI client with API key.
 
@@ -21,12 +22,17 @@ def init(api_key=None):
     _client = OpenAI(api_key=api_key)
 
 
-def get_description(image_url, prompt="What's in this image?", max_tokens=300, model="gpt-4o"):
+def get_description(
+        image_path: str,
+        prompt: str = "What's in this image?",
+        max_tokens: int = 300,
+        model: str = "gpt-4-vision-preview"
+) -> str:
     """
     Get image description using OpenAI's vision models.
 
     Parameters:
-    - image_url (str): URL of the image to analyze
+    - image_path (str): URL or local path of the image to analyze
     - prompt (str): Prompt for the model
     - max_tokens (int): Maximum response length
     - model (str): OpenAI model to use
@@ -37,7 +43,7 @@ def get_description(image_url, prompt="What's in this image?", max_tokens=300, m
     if _client is None:
         init()
 
-    encoded_image, _ = get_image_data(image_url)
+    encoded_image, _ = get_image_data(image_path)
 
     try:
         response = _client.chat.completions.create(
@@ -58,4 +64,37 @@ def get_description(image_url, prompt="What's in this image?", max_tokens=300, m
         )
         return response.choices[0].message.content
     except Exception as e:
-        raise RuntimeError(f"OpenAI API request failed: {e}")
+        raise RuntimeError(f"OpenAI API request failed: {str(e)}")
+
+
+def get_description_batch(
+        image_paths: List[str],
+        prompt: str = "What's in this image?",
+        max_tokens: int = 300,
+        model: str = "gpt-4-vision-preview",
+        concurrent_limit: int = 3
+) -> List[BatchResult]:
+    """
+    Process multiple images in batch.
+
+    Parameters:
+    - image_paths (List[str]): List of image URLs or local paths
+    - prompt (str): Prompt for the model
+    - max_tokens (int): Maximum response length
+    - model (str): OpenAI model to use
+    - concurrent_limit (int): Maximum number of concurrent operations
+
+    Returns:
+    - List[BatchResult]: Results for each image
+    """
+    if _client is None:
+        init()
+
+    return process_batch_images(
+        image_paths=image_paths,
+        processor=get_description,
+        concurrent_limit=concurrent_limit,
+        prompt=prompt,
+        max_tokens=max_tokens,
+        model=model
+    )
