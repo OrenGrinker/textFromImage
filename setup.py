@@ -5,7 +5,7 @@ with open('README.md', 'r', encoding='utf-8') as f:
 
 setup(
     name="textfromimage",
-    version="1.1.0",
+    version="1.1.1",
     author="Oren Grinker",
     author_email="orengr4@gmail.com",
     description="Get descriptions of images from OpenAI, Azure OpenAI, and Anthropic Claude models with support for local files and batch processing.",

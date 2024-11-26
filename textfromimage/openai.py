@@ -26,7 +26,7 @@ def get_description(
         image_path: str,
         prompt: str = "What's in this image?",
         max_tokens: int = 300,
-        model: str = "gpt-4-vision-preview"
+        model: str = "gpt-4o"
 ) -> str:
     """
     Get image description using OpenAI's vision models.
@@ -71,7 +71,7 @@ def get_description_batch(
         image_paths: List[str],
         prompt: str = "What's in this image?",
         max_tokens: int = 300,
-        model: str = "gpt-4-vision-preview",
+        model: str = "gpt-4o",
         concurrent_limit: int = 3
 ) -> List[BatchResult]:
     """
